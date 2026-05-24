@@ -32,6 +32,10 @@ namespace VisitorRequestApi.Controllers
                     return BadRequest(ModelState);
                 }
 
+                // convert plain password to hash before saving to database
+                user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(user.PasswordHash);
+
+
                 var result = await _userRepository.CreateUser(user);
 
                 if (result.Result == 1)
