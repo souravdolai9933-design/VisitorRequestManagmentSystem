@@ -1,0 +1,11 @@
+<Solution>
+  <Folder Name="/Library/">
+    <Project Path="VisitorRequest.Core/VisitorRequest.Core.csproj" Id="18528a48-c2f5-4b11-93fe-22ee0c47dd86" />
+    <Project Path="VisitorRequest.Data/VisitorRequest.Data.csproj" Id="ec328aa3-781f-4b0e-8eb0-8805423c8f59" />
+    <Project Path="VisitorRequest.Utilities/VisitorRequest.Utilities.csproj" Id="816680d6-a609-4950-b8ea-a5d0da344d5c" />
+  </Folder>
+  <Folder Name="/Presentation/">
+    <Project Path="VisitorRequestApi/VisitorRequestApi.csproj" Id="b25d7cdd-8e3f-44aa-b841-e696b89ffa8a" />
+  </Folder>
+  <Project Path="VisitorWebApplication/VisitorWebApplication.csproj" />
+</Solution>

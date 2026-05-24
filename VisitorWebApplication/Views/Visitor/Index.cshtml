@@ -1,0 +1,108 @@
+@{
+    ViewData["Title"] = "Visitor Requests";
+}
+
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/free-jqgrid@4.15.5/css/ui.jqgrid.min.css"/>
+<link rel="stylesheet" href="~/css/visitor-dashboard.css" asp-append-version="true" />
+
+<div class="visitor-page">
+
+    <div class="visitor-header">
+        <div>
+            <h2>Visitor Portal</h2>
+            <p>Manage and track your visitor access requests securely</p>
+        </div>
+
+        <div>
+            <button type="button" id="addRequestBtn" class="btn btn-light fw-bold me-2" onclick="openAddModal()">
+                New Visitor Request
+            </button>
+
+            <button type="button" class="btn btn-outline-light" onclick="logout()">
+                Logout
+            </button>
+        </div>
+    </div>
+
+    <div class="grid-card">
+        <table id="visitorGrid"></table>
+        <div id="visitorPager"></div>
+    </div>
+
+</div>
+
+<!-- Add / Edit Visitor Modal -->
+<div class="modal fade" id="requestModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg rounded-4">
+
+            <div class="modal-header bg-primary text-white rounded-top-4">
+                <h5 class="modal-title" id="requestModalTitle">Add Visitor Request</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body p-4">
+
+                <div id="requestModalError" class="alert alert-danger d-none"></div>
+
+                <input type="hidden" id="requestId" />
+
+                <div class="row g-3">
+
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold">Visitor Name</label>
+                        <input type="text" id="visitorName" class="form-control" placeholder="Enter visitor name" />
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold">Mobile Number</label>
+                        <input type="text" id="mobileNumber" class="form-control" maxlength="10" placeholder="Enter mobile number" />
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold">Company Name</label>
+                        <input type="text" id="companyName" class="form-control" placeholder="Enter company name" />
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold">Person To Meet</label>
+                        <input type="text" id="personToMeet" class="form-control" placeholder="Enter person name" />
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold">Purpose Of Visit</label>
+                        <input type="text" id="purposeOfVisit" class="form-control" placeholder="Enter purpose" />
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold">Visit Date</label>
+                        <input type="date" id="visitDate" class="form-control" />
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="modal-footer bg-light rounded-bottom-4">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    Close
+                </button>
+
+                <button type="button" id="saveRequestBtn" class="btn btn-primary" onclick="saveRequest()">
+                    Save Request
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/free-jqgrid@4.15.5/js/i18n/grid.locale-en.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/free-jqgrid@4.15.5/js/jquery.jqgrid.min.js"></script>
+
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/visitor.js" asp-append-version="true"></script>
+}

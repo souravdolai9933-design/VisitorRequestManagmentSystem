@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Visitor Access Portal</title>
+    
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/VisitorWebApplication.styles.css" asp-append-version="true" />
+    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            color: #333333;
+        }
+        .navbar {
+            background-color: #ffffff !important;
+            border-bottom: 1px solid #cccccc;
+        }
+        .footer {
+            background-color: #ffffff;
+            border-top: 1px solid #cccccc;
+            color: #666666;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-md navbar-toggleable-md navbar-light bg-white py-3">
+            <div class="container-fluid px-4">
+                <a class="navbar-brand fw-bold" href="/Visitor/Index">
+                    Visitor Portal
+                </a>
+                <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-md-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        <!-- Populated dynamically by site.js -->
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    
+    <div>
+        <main role="main">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="footer py-3 text-center small mt-auto">
+        <div class="container-fluid">
+            &copy; 2026 - <span class="fw-semibold text-primary">SecureVisitor Access Portal</span>. All Rights Reserved.
+        </div>
+    </footer>
+
+    <!-- Core Scripts -->
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

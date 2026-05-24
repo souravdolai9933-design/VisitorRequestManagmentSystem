@@ -1,0 +1,160 @@
+﻿body {
+    background: #f4f7fb;
+}
+
+.visitor-page {
+    max-width: 1180px;
+    margin: 30px auto;
+}
+
+.visitor-header {
+    background: linear-gradient(135deg, #1f4b99, #183b7a);
+    color: #fff;
+    border-radius: 16px;
+    padding: 28px 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 12px 30px rgba(31, 75, 153, 0.25);
+}
+
+    .visitor-header h2 {
+        font-weight: 700;
+        margin-bottom: 6px;
+    }
+
+    .visitor-header p {
+        margin: 0;
+        color: #c9d8ff;
+    }
+
+.grid-card {
+    margin-top: 24px;
+    background: #fff;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.08);
+    overflow-x: auto;
+}
+
+/* jqGrid design */
+.ui-jqgrid {
+    border: none !important;
+    font-family: "Segoe UI", Arial, sans-serif !important;
+}
+
+.ui-jqgrid-titlebar {
+    background: #fff !important;
+    color: #1f2937 !important;
+    font-weight: 700;
+    border: none !important;
+    padding: 12px !important;
+}
+
+.ui-jqgrid-hdiv {
+    background: #f8fafc !important;
+    border-bottom: 1px solid #e5e7eb !important;
+}
+
+.ui-jqgrid-htable th {
+    height: 44px !important;
+    color: #334155 !important;
+    font-size: 14px !important;
+    font-weight: 700 !important;
+    background: #f8fafc !important;
+}
+
+.ui-jqgrid-btable tr.jqgrow {
+    height: 54px !important;
+}
+
+    .ui-jqgrid-btable tr.jqgrow:hover {
+        background: #f1f5ff !important;
+    }
+
+.ui-jqgrid-btable td {
+    padding: 10px !important;
+    font-size: 14px !important;
+    border-color: #edf2f7 !important;
+    vertical-align: middle !important;
+}
+
+.ui-search-toolbar input {
+    width: 90% !important;
+    height: 30px !important;
+    border: 1px solid #cbd5e1 !important;
+    border-radius: 6px !important;
+    padding: 4px 8px !important;
+}
+
+.ui-search-clear {
+    color: #2563eb !important;
+}
+
+.ui-pager-control {
+    background: #f8fafc !important;
+    border-top: 1px solid #e5e7eb !important;
+}
+
+.btn-action {
+    border: none;
+    padding: 6px 12px;
+    border-radius: 8px;
+    color: #fff;
+    font-size: 13px;
+    margin-right: 5px;
+}
+
+.btn-edit {
+    background: #2563eb;
+}
+
+.btn-delete {
+    background: #dc2626;
+}
+
+.badge-locked {
+    background: #64748b;
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+}
+
+.grid-action-buttons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    flex-wrap: nowrap;
+}
+
+.btn-grid {
+    border: none;
+    padding: 4px 10px;
+    font-size: 12px;
+    font-weight: 600;
+    border-radius: 6px;
+    color: #fff;
+    line-height: 1.2;
+    min-width: 58px;
+    cursor: pointer;
+}
+
+.btn-edit {
+    background: #0d6efd;
+}
+
+.btn-delete,
+.btn-reject {
+    background: #dc3545;
+}
+
+.btn-approve {
+    background: #198754;
+}
+
+.action-locked {
+    font-size: 12px;
+    border-radius: 6px;
+}
