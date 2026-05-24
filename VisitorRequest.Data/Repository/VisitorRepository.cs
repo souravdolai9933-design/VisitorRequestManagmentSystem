@@ -127,10 +127,6 @@ namespace VisitorRequest.Repository
             return result;
         }
 
-
-
-
-        
         public async Task<DbResult> DeleteVisitorRequest(int visitorRequestId)
         {
             using var connections = _dbConnectionFactory.CreateConnection();
@@ -147,24 +143,37 @@ namespace VisitorRequest.Repository
             return result;
         }
 
-        public async Task<AppUser> LoginUser(LoginDto dto)
+
+
+
+        // Logi User 
+
+        public async Task<AppUserDto?> LoginUser(LoginDto dto)
         {
             using var con = _dbConnectionFactory.CreateConnection();
 
             var parameters = new DynamicParameters();
+            parameters.Add("@UserEmail", dto.Email);
 
-            parameters.Add("@Email", dto.Email);
-
-            parameters.Add("@Password", dto.Password);
-
-            var user = await con.QueryFirstOrDefaultAsync<AppUser>(
-                "sp_LoginUser",
+            var user = await con.QueryFirstOrDefaultAsync<AppUserDto>(
+                "sp_GetUserByEmail",
                 parameters,
                 commandType: CommandType.StoredProcedure
             );
 
+            if (user == null)
+                return null;
+
+            // Verrify Password
+            bool isPasswordValid = BCrypt.Net.BCrypt.Verify(dto.Password, user.LoginPassword);
+
+            if (!isPasswordValid)
+                return null;
+
             return user;
         }
+
+
 
         public async Task<List<PendingVisitorRequestDto>> GetMyVisitorRequests(int userId)
         {

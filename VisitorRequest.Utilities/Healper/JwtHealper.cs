@@ -16,7 +16,7 @@ namespace VisitorRequestApi.Healper
             _configuration = configuration;
         }
 
-        public string GenerateToken(AppUser user)
+        public string GenerateToken(AppUserDto user)
         {
             var jwt = _configuration.GetSection("Jwt");
 
@@ -30,7 +30,7 @@ namespace VisitorRequestApi.Healper
                 new Claim(ClaimTypes.Name, user.FullName),
                 new Claim(ClaimTypes.Email, user.Email),
                 new Claim(ClaimTypes.Role, user.RoleName),
-                new Claim("RoleId", user.RoleId.ToString())
+            
             };
 
             var expireMinutes = int.Parse(jwt["ExpireMinutes"] ?? "60");

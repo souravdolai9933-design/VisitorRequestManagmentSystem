@@ -23,7 +23,7 @@ namespace VisitorRequest.Interface
         Task<DbResult> DeleteVisitorRequest(int visitorRequestId);
 
         // Login User
-        Task<AppUser?> LoginUser(LoginDto dto);
+        Task<AppUserDto?> LoginUser(LoginDto dto);
 
         // Get requests created by a specific user
         Task<List<PendingVisitorRequestDto>> GetMyVisitorRequests(int userId);
@@ -33,5 +33,6 @@ namespace VisitorRequest.Interface
 
         // Get all visitor requests in the system (for Admin)
         Task<List<PendingVisitorRequestDto>> GetAllVisitorRequests();
+
     }
 }

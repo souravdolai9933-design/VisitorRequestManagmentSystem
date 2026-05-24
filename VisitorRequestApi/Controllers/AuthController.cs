@@ -40,7 +40,7 @@ namespace VisitorRequestApi.Controllers
                     message = "Invalid email or password"
                 });
             }
-
+            // Generate JWT token
             var token = _jwtHealper.GenerateToken(user);
 
             return Ok(new
@@ -52,7 +52,6 @@ namespace VisitorRequestApi.Controllers
                     user.UserId,
                     user.FullName,
                     user.Email,
-                    user.RoleId,
                     user.RoleName,
                     token
                 }
