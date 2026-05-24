@@ -9,12 +9,12 @@ namespace VisitorRequestApi.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private readonly IvisitorRepository _repository;
+        private readonly IInitiatorRepository _initiatorRepository;
         private readonly JwtHealper _jwtHealper;
 
-        public AuthController(IvisitorRepository repository, JwtHealper jwtHealper)
+        public AuthController(IInitiatorRepository initiatorRepository, JwtHealper jwtHealper)
         {
-            _repository = repository;
+            _initiatorRepository = initiatorRepository;
             _jwtHealper = jwtHealper;
         }
 
@@ -30,7 +30,7 @@ namespace VisitorRequestApi.Controllers
                 });
             }
 
-            var user = await _repository.LoginUser(dto);
+            var user = await _initiatorRepository.LoginUser(dto);
 
             if (user == null)
             {
@@ -52,6 +52,7 @@ namespace VisitorRequestApi.Controllers
                     user.UserId,
                     user.FullName,
                     user.Email,
+                    user.RoleId,
                     user.RoleName,
                     token
                 }

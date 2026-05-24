@@ -30,7 +30,8 @@ namespace VisitorRequestApi.Healper
                 new Claim(ClaimTypes.Name, user.FullName),
                 new Claim(ClaimTypes.Email, user.Email),
                 new Claim(ClaimTypes.Role, user.RoleName),
-            
+               new Claim("RoleId", user.RoleId.ToString())
+
             };
 
             var expireMinutes = int.Parse(jwt["ExpireMinutes"] ?? "60");

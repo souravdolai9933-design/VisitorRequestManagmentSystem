@@ -1,4 +1,5 @@
-const visitorApiUrl = "https://localhost:7043/api/Visitor";
+const initiatorApiUrl = "https://localhost:7043/api/Initiator";
+const adminApiUrl = "https://localhost:7043/api/Admin";
 
 $(document).ready(function () {
     loadVisitorGrid();
@@ -19,9 +20,9 @@ function loadVisitorGrid() {
     }
 
     // Determine API URL based on role
-    let gridUrl = visitorApiUrl + "/myrequests/" + user.userId;
+    let gridUrl = initiatorApiUrl + "/myrequests/" + user.userId;
     if (user.roleName === "Admin") {
-        gridUrl = visitorApiUrl + "/all";
+        gridUrl = adminApiUrl + "/all";
     }
 
     $("#visitorGrid").jqGrid({
@@ -132,7 +133,7 @@ function deleteRequest(id) {
     }
 
     $.ajax({
-        url: visitorApiUrl + "/delete/" + id,
+        url: initiatorApiUrl + "/delete/" + id,
         type: "DELETE",
         success: function (response) {
             alert(response.message || "Deleted successfully");
@@ -218,7 +219,7 @@ function saveRequest() {
     }
 
     $.ajax({
-        url: isEdit ? (visitorApiUrl + "/update/" + id) : (visitorApiUrl + "/addRequest"),
+        url: isEdit ? (initiatorApiUrl + "/update/" + id) : (initiatorApiUrl + "/addRequest"),
         type: isEdit ? "PUT" : "POST",
         contentType: "application/json",
         data: JSON.stringify(requestData),
@@ -248,7 +249,7 @@ function approveRequest(id) {
     }
 
     $.ajax({
-        url: visitorApiUrl + "/approve/" + id,
+        url: adminApiUrl + "/approve/" + id,
         type: "POST",
         contentType: "application/json",
         data: JSON.stringify({ visitorRequestId: id, adminId: adminId }),
@@ -275,7 +276,7 @@ function rejectRequest(id) {
     }
 
     $.ajax({
-        url: visitorApiUrl + "/reject/" + id,
+        url: adminApiUrl + "/reject/" + id,
         type: "POST",
         contentType: "application/json",
         data: JSON.stringify({ remarks: remarks }),

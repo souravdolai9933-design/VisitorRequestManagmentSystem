@@ -14,6 +14,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
+// Add Swagger Services
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
 // Add JWT Authentication Configuration
 var jwtSettings = builder.Configuration.GetSection("Jwt");
 var key = Encoding.UTF8.GetBytes(jwtSettings["Key"]!);
@@ -45,8 +49,10 @@ builder.Services.AddAuthorization();
 builder.Services.AddSingleton<DbConnectionFactory>();
 
 
+
 // Dependency Injection
-builder.Services.AddScoped<IvisitorRepository, VisitorRepository>();
+builder.Services.AddScoped<IInitiatorRepository, InitiatorRepository>();
+builder.Services.AddScoped<IAdminRepository, AdminRepository>();
 builder.Services.AddScoped<IuserRepository, UserRepository>();
 builder.Services.AddScoped<JwtHealper>();
 
@@ -67,6 +73,11 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    app.UseSwagger();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Visitor Request API v1");
+    });
 }
 
 app.UseHttpsRedirection();

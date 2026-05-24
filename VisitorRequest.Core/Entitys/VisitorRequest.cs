@@ -1,8 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Text;
 
-namespace VisitorRequest.Dto
+namespace VisitorRequest.Core.Entitys
 {
-    public class VisitorRequestDto
+    public class VisitorRequest
     {
         public int VisitorRequestId { get; set; }
 
@@ -11,8 +14,8 @@ namespace VisitorRequest.Dto
         public string VisitorName { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Mobile number is required")]
-        [RegularExpression(@"^\d{10}$",
-            ErrorMessage = "Mobile number must be exactly 10 digits")]
+        [RegularExpression(@"^[0-9]{10}$",
+            ErrorMessage = "Mobile number must contain exactly 10 numeric digits")]
         public string MobileNumber { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Company name is required")]
@@ -20,23 +23,29 @@ namespace VisitorRequest.Dto
         public string CompanyName { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Person to meet is required")]
-        [StringLength(100, ErrorMessage = "Person name cannot exceed 100 characters")]
+        [StringLength(100, ErrorMessage = "Person to meet cannot exceed 100 characters")]
         public string PersonToMeet { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Purpose of visit is required")]
-        [StringLength(250, ErrorMessage = "Purpose cannot exceed 250 characters")]
+        [StringLength(250, ErrorMessage = "Purpose of visit cannot exceed 250 characters")]
         public string PurposeOfVisit { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Visit date is required")]
         [DataType(DataType.Date)]
         public DateTime VisitDate { get; set; }
 
-        public string Status { get; set; } = "Pending";
+        public string Status { get; set; }  
 
-        public int CreatedBy { get; set; }
-
+        [StringLength(250, ErrorMessage = "Remarks cannot exceed 250 characters")]
         public string? Remarks { get; set; }
 
-        public string? CreatedByName { get; set; }
+        [Required(ErrorMessage = "Created by is required")]
+        public int CreatedBy { get; set; }
+
+        public DateTime CreatedDate { get; set; }
+
+        public int? ModifiedBy { get; set; }
+
+        public DateTime? ModifiedDate { get; set; }
     }
 }

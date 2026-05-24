@@ -3,20 +3,20 @@ using Dapper;
 using Microsoft.Extensions.Logging;
 using System.Data;
 using VisitorRequest.Core.common;
-using VisitorRequest.Data.Repository;
 using VisitorRequest.Dto;
 using VisitorRequest.Interface;
 using VisitorRequestApi.Connection;
+using VisitorRequestEntity = VisitorRequest.Core.Entitys.VisitorRequest;
 
 namespace VisitorRequest.Repository
 {
-    public class VisitorRepository : IvisitorRepository
+    public class InitiatorRepository : IInitiatorRepository
     {
 
         private readonly DbConnectionFactory _dbConnectionFactory;
-        private readonly ILogger<UserRepository> _logger;
+        private readonly ILogger<InitiatorRepository> _logger;
 
-        public VisitorRepository(DbConnectionFactory dbConnectionFactory,ILogger<UserRepository> logger)
+        public InitiatorRepository(DbConnectionFactory dbConnectionFactory, ILogger<InitiatorRepository> logger)
         {
             _dbConnectionFactory = dbConnectionFactory;
             _logger = logger;
@@ -24,8 +24,9 @@ namespace VisitorRequest.Repository
 
 
         // Create Visitor Request
-        public async Task<DbResult> CreateVisitorRequest(VisitorRequestDto visitorReq)
+        public async Task<DbResult> CreateVisitorRequest(VisitorRequestEntity visitorReq)
         {
+            _logger.LogInformation("CreateVisitorRequest: Repository method called for Visitor: {VisitorName}", visitorReq.VisitorName);
             try
             {
                 // Create Database Connection
@@ -47,10 +48,12 @@ namespace VisitorRequest.Repository
                     commandType: System.Data.CommandType.StoredProcedure
                 );
 
+                _logger.LogInformation("CreateVisitorRequest: SP executed successfully. Result: {Result}", result?.Result);
                 return result;
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "CreateVisitorRequest: Exception occurred for Visitor: {VisitorName}", visitorReq.VisitorName);
                 return new DbResult
                 {
                     Result = 0,
@@ -62,6 +65,7 @@ namespace VisitorRequest.Repository
         // Update Visitor Request
         public async Task<DbResult> UpdateVisitorRequest(UpdateVisitorRequestDto dto)
         {
+            _logger.LogInformation("UpdateVisitorRequest: Repository method called for Id: {Id}", dto.VisitorRequestId);
             try
             {
                 using var connections = _dbConnectionFactory.CreateConnection();
@@ -83,10 +87,12 @@ namespace VisitorRequest.Repository
                     commandType: CommandType.StoredProcedure
                 );
 
+                _logger.LogInformation("UpdateVisitorRequest: SP executed successfully for Id: {Id}. Result: {Result}", dto.VisitorRequestId, result?.Result);
                 return result;
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "UpdateVisitorRequest: Exception occurred for Id: {Id}", dto.VisitorRequestId);
                 return new DbResult
                 {
                     Result = 0,
@@ -96,60 +102,45 @@ namespace VisitorRequest.Repository
             }
         }
 
-        // Get Pending Visitor Requests
-        public async Task<List<PendingVisitorRequestDto>> GetPendingVisitorRequests()
+        public async Task<DbResult> DeleteVisitorRequest(int visitorRequestId, int initiatorId)
         {
-            using var connections = _dbConnectionFactory.CreateConnection();
+            _logger.LogInformation(
+                "DeleteVisitorRequest: Repository method called for VisitorRequestId: {VisitorRequestId}, InitiatorId: {InitiatorId}",
+                visitorRequestId,
+                initiatorId);
 
-            var result = await connections.QueryAsync<PendingVisitorRequestDto>(
-                "sp_GetPendingVisitorRequests",
-                commandType: CommandType.StoredProcedure
-            );
-
-            return result.ToList();
-        }
-
-        // Approve Visitor Request
-        public async Task<DbResult> ApproveVisitorRequest(ApproveVisitorRequestDto dto)
-        {
             using var connections = _dbConnectionFactory.CreateConnection();
 
             var parameters = new DynamicParameters();
-            parameters.Add("@VisitorRequestId", dto.VisitorRequestId);
-            parameters.Add("@AdminId", dto.AdminId);
 
-            var result = await connections.QueryFirstOrDefaultAsync<DbResult>(
-                "sp_ApproveVisitorRequest",
-                parameters,
-                commandType: CommandType.StoredProcedure
-            );
-
-            return result;
-        }
-
-        public async Task<DbResult> DeleteVisitorRequest(int visitorRequestId)
-        {
-            using var connections = _dbConnectionFactory.CreateConnection();
-
-            var parameters = new DynamicParameters();
+            parameters.Add("@InitiatorId", initiatorId);
             parameters.Add("@VisitorRequestId", visitorRequestId);
 
             var result = await connections.QueryFirstOrDefaultAsync<DbResult>(
-                "sp_DeleteVisitorRequest",
+                "sp_DeletePendingRequestByInitiatorId",
                 parameters,
                 commandType: CommandType.StoredProcedure
             );
 
-            return result;
+            _logger.LogInformation(
+                "DeleteVisitorRequest: SP executed for VisitorRequestId: {VisitorRequestId}. Result: {Result}",
+                visitorRequestId,
+                result?.Result);
+
+            return result ?? new DbResult
+            {
+                Result = 0,
+                Message = "No response received from database"
+            };
         }
 
 
 
-
-        // Logi User 
+        // Login User 
 
         public async Task<AppUserDto?> LoginUser(LoginDto dto)
         {
+            _logger.LogInformation("LoginUser: Repository method called for Email: {Email}", dto.Email);
             using var con = _dbConnectionFactory.CreateConnection();
 
             var parameters = new DynamicParameters();
@@ -162,14 +153,21 @@ namespace VisitorRequest.Repository
             );
 
             if (user == null)
+            {
+                _logger.LogWarning("LoginUser: No user found for Email: {Email}", dto.Email);
                 return null;
+            }
 
             // Verrify Password
             bool isPasswordValid = BCrypt.Net.BCrypt.Verify(dto.Password, user.LoginPassword);
 
             if (!isPasswordValid)
+            {
+                _logger.LogWarning("LoginUser: Invalid password for Email: {Email}", dto.Email);
                 return null;
+            }
 
+            _logger.LogInformation("LoginUser: Login successful for Email: {Email}", dto.Email);
             return user;
         }
 
@@ -177,6 +175,7 @@ namespace VisitorRequest.Repository
 
         public async Task<List<PendingVisitorRequestDto>> GetMyVisitorRequests(int userId)
         {
+            _logger.LogInformation("GetMyVisitorRequests: Repository method called for UserId: {UserId}", userId);
             using var connections = _dbConnectionFactory.CreateConnection();
 
             var parameters = new DynamicParameters();
@@ -188,47 +187,7 @@ namespace VisitorRequest.Repository
                 commandType: CommandType.StoredProcedure
             );
 
-            return result.ToList();
-        }
-
-        public async Task<DbResult> RejectVisitorRequest(int visitorRequestId, int adminId, string remarks)
-        {
-            try
-            {
-                using var connections = _dbConnectionFactory.CreateConnection();
-
-                var parameters = new DynamicParameters();
-                parameters.Add("@VisitorRequestId", visitorRequestId);
-                parameters.Add("@AdminId", adminId);
-                parameters.Add("@Remarks", remarks);
-
-                var result = await connections.QueryFirstOrDefaultAsync<DbResult>(
-                    "sp_RejectVisitorRequest",
-                    parameters,
-                    commandType: CommandType.StoredProcedure
-                );
-
-                return result;
-            }
-            catch (Exception ex)
-            {
-                return new DbResult
-                {
-                    Result = 0,
-                    Message = ex.Message
-                };
-            }
-        }
-
-        public async Task<List<PendingVisitorRequestDto>> GetAllVisitorRequests()
-        {
-            using var connections = _dbConnectionFactory.CreateConnection();
-
-            var result = await connections.QueryAsync<PendingVisitorRequestDto>(
-                "sp_GetAllVisitorRequests",
-                commandType: CommandType.StoredProcedure
-            );
-
+            _logger.LogInformation("GetMyVisitorRequests: Fetched {Count} records for UserId: {UserId}", result.AsList().Count, userId);
             return result.ToList();
         }
     }
