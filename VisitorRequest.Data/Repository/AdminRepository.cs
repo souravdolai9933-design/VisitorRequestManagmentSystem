@@ -3,6 +3,7 @@ using Dapper;
 using Microsoft.Extensions.Logging;
 using System.Data;
 using VisitorRequest.Core.common;
+using VisitorRequest.Core.Dtos;
 using VisitorRequest.Dto;
 using VisitorRequest.Interface;
 using VisitorRequestApi.Connection;
@@ -28,7 +29,7 @@ namespace VisitorRequest.Repository
             using var connections = _dbConnectionFactory.CreateConnection();
 
             var result = await connections.QueryAsync<PendingVisitorRequestDto>(
-                "sp_GetPendingVisitorRequests",
+                "sp_GetallPendingRequestByAdmin",
                 commandType: CommandType.StoredProcedure
             );
 
@@ -102,16 +103,31 @@ namespace VisitorRequest.Repository
                 };
             }
         }
-
-        public async Task<List<PendingVisitorRequestDto>> GetAllVisitorRequests()
+        /*
+        public async Task<IEnumerable<VisitorRequestListDto>> GetAllVisitorsRequest()
         {
             _logger.LogInformation("GetAllVisitorRequests: Repository method called.");
             using var connections = _dbConnectionFactory.CreateConnection();
 
-            var result = await connections.QueryAsync<PendingVisitorRequestDto>(
-                "sp_GetAllVisitorRequests",
-                commandType: CommandType.StoredProcedure
-            );
+            var result = await connections.QueryAsync<VisitorRequestListDto>(
+                 "sp_GetAllVisitorsRequest",
+        commandType: CommandType.StoredProcedure
+              );
+
+            _logger.LogInformation("GetAllVisitorRequests: Fetched {Count} total records.", result.AsList().Count);
+            return result.ToList();
+        } */
+
+      public async  Task<List<VisitorRequestListDto>>  GetAllVisitorsRequest()
+        {
+
+            _logger.LogInformation("GetAllVisitorRequests: Repository method called.");
+            using var connections = _dbConnectionFactory.CreateConnection();
+
+            var result = await connections.QueryAsync<VisitorRequestListDto>(
+                 "sp_GetAllVisitorsRequest",
+        commandType: CommandType.StoredProcedure
+              );
 
             _logger.LogInformation("GetAllVisitorRequests: Fetched {Count} total records.", result.AsList().Count);
             return result.ToList();

@@ -30,11 +30,12 @@ namespace VisitorRequestApi.Controllers
             return Ok(result);
         }
 
+
         [HttpGet("all")]
         public async Task<IActionResult> GetAllVisitorRequests()
         {
             _logger.LogInformation("GetAllVisitorRequests: Method called.");
-            var result = await _adminRepository.GetAllVisitorRequests();
+            var result = await _adminRepository.GetAllVisitorsRequest();
             _logger.LogInformation("GetAllVisitorRequests: Returned {Count} total requests.", result.Count);
             return Ok(result);
         }

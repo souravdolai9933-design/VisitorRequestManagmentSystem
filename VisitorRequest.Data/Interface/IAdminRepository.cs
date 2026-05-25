@@ -1,4 +1,5 @@
 using VisitorRequest.Core.common;
+using VisitorRequest.Core.Dtos;
 using VisitorRequest.Dto;
 
 namespace VisitorRequest.Interface
@@ -15,6 +16,6 @@ namespace VisitorRequest.Interface
         Task<DbResult> RejectVisitorRequest(int visitorRequestId, int adminId, string remarks);
 
         // Get all visitor requests in the system (for Admin)
-        Task<List<PendingVisitorRequestDto>> GetAllVisitorRequests();
+        Task<List<VisitorRequestListDto>> GetAllVisitorsRequest();
     }
 }
